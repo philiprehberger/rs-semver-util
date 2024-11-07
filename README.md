@@ -10,7 +10,7 @@ Semantic versioning with range parsing, comparison, and bumping.
 
 ```toml
 [dependencies]
-philiprehberger-semver-util = "0.1"
+philiprehberger-semver-util = "0.1.5"
 ```
 
 ## Usage
