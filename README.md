@@ -4,7 +4,7 @@
 [![Crates.io](https://img.shields.io/crates/v/philiprehberger-semver-util.svg)](https://crates.io/crates/philiprehberger-semver-util)
 [![License](https://img.shields.io/github/license/philiprehberger/rs-semver-util)](LICENSE)
 
-Semantic versioning with range parsing, comparison, and bumping.
+Semantic versioning with range parsing, comparison, and bumping
 
 ## Installation
 
