@@ -120,7 +120,7 @@ impl std::error::Error for ParseError {}
 /// let v = Version::parse("1.2.3").unwrap();
 /// assert_eq!(v.bump_minor().to_string(), "1.3.0");
 /// ```
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct Version {
     /// The major version number.
     pub major: u64,
@@ -143,6 +143,37 @@ impl Version {
     /// let v = Version::new(1, 2, 3);
     /// assert_eq!(v.to_string(), "1.2.3");
     /// ```
+    /// Returns `true` if this version has pre-release identifiers.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use philiprehberger_semver_util::Version;
+    ///
+    /// assert!(Version::parse("1.0.0-alpha.1").unwrap().is_pre_release());
+    /// assert!(!Version::parse("1.0.0").unwrap().is_pre_release());
+    /// ```
+    #[must_use]
+    pub fn is_pre_release(&self) -> bool {
+        !self.pre.is_empty()
+    }
+
+    /// Returns `true` if this version is stable (major >= 1 and no pre-release).
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use philiprehberger_semver_util::Version;
+    ///
+    /// assert!(Version::parse("1.0.0").unwrap().is_stable());
+    /// assert!(!Version::parse("0.9.0").unwrap().is_stable());
+    /// assert!(!Version::parse("1.0.0-beta.1").unwrap().is_stable());
+    /// ```
+    #[must_use]
+    pub fn is_stable(&self) -> bool {
+        self.major >= 1 && self.pre.is_empty()
+    }
+
     pub fn new(major: u64, minor: u64, patch: u64) -> Self {
         Self {
             major,
@@ -220,6 +251,7 @@ impl Version {
     /// let v = Version::parse("1.2.3-alpha.1").unwrap();
     /// assert_eq!(v.bump_major().to_string(), "2.0.0");
     /// ```
+    #[must_use]
     pub fn bump_major(&self) -> Version {
         Version {
             major: self.major + 1,
@@ -241,6 +273,7 @@ impl Version {
     /// let v = Version::parse("1.2.3").unwrap();
     /// assert_eq!(v.bump_minor().to_string(), "1.3.0");
     /// ```
+    #[must_use]
     pub fn bump_minor(&self) -> Version {
         Version {
             major: self.major,
@@ -262,6 +295,7 @@ impl Version {
     /// let v = Version::parse("1.2.3").unwrap();
     /// assert_eq!(v.bump_patch().to_string(), "1.2.4");
     /// ```
+    #[must_use]
     pub fn bump_patch(&self) -> Version {
         Version {
             major: self.major,
@@ -291,6 +325,7 @@ impl Version {
     /// let v3 = Version::parse("1.0.0-alpha.2").unwrap();
     /// assert_eq!(v3.bump_pre("beta").to_string(), "1.0.0-beta.0");
     /// ```
+    #[must_use]
     pub fn bump_pre(&self, label: &str) -> Version {
         let new_pre = if self.pre.len() >= 2 {
             if let PreRelease::AlphaNumeric(ref existing_label) = self.pre[0] {
@@ -415,6 +450,7 @@ impl PartialOrd for Version {
     }
 }
 
+
 /// A comparator operator used in version range expressions.
 #[derive(Clone, Debug, PartialEq, Eq)]
 enum Comparator {
@@ -506,8 +542,30 @@ impl VersionRange {
     /// assert!(range.matches(&Version::parse("0.2.5").unwrap()));
     /// assert!(!range.matches(&Version::parse("0.3.0").unwrap()));
     /// ```
+    #[must_use]
     pub fn matches(&self, version: &Version) -> bool {
         self.comparators.iter().all(|c| c.matches(version))
+    }
+}
+
+impl fmt::Display for VersionRange {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let parts: Vec<String> = self.comparators.iter().map(|c| match c {
+            Comparator::Exact(v) => format!("{}", v),
+            Comparator::Gt(v) => format!(">{}", v),
+            Comparator::Gte(v) => format!(">={}", v),
+            Comparator::Lt(v) => format!("<{}", v),
+            Comparator::Lte(v) => format!("<={}", v),
+        }).collect();
+        write!(f, "{}", parts.join(", "))
+    }
+}
+
+impl FromStr for VersionRange {
+    type Err = ParseError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        VersionRange::parse(s)
     }
 }
 

@@ -10,7 +10,7 @@ Semantic versioning with range parsing, comparison, and bumping
 
 ```toml
 [dependencies]
-philiprehberger-semver-util = "0.1.6"
+philiprehberger-semver-util = "0.2.0"
 ```
 
 ## Usage
@@ -32,6 +32,19 @@ let range = VersionRange::parse("^1.2.0").unwrap();
 assert!(range.matches(&v1));
 assert!(range.matches(&v2));
 assert!(!range.matches(&Version::parse("2.0.0").unwrap()));
+
+// Default version
+let zero = Version::default();
+assert_eq!(zero.to_string(), "0.0.0");
+
+// Pre-release and stability checks
+assert!(Version::parse("1.0.0").unwrap().is_stable());
+assert!(!Version::parse("0.9.0").unwrap().is_stable());
+assert!(Version::parse("1.0.0-alpha.1").unwrap().is_pre_release());
+
+// VersionRange Display and FromStr
+let range: VersionRange = ">=1.0.0, <2.0.0".parse().unwrap();
+println!("{}", range); // ">=1.0.0, <2.0.0"
 ```
 
 ## API
@@ -47,6 +60,11 @@ assert!(!range.matches(&Version::parse("2.0.0").unwrap()));
 | `VersionRange::parse(s)` | Parse a version range |
 | `.matches(version)` | Check if version satisfies range |
 | `sort_versions(versions)` | Sort versions in semver order |
+| `.is_pre_release()` | Check if version has pre-release |
+| `.is_stable()` | Check if major >= 1 and no pre-release |
+| `Version::default()` | Create version 0.0.0 |
+| `VersionRange` Display | Print range expression |
+| `VersionRange` FromStr | Parse range from string |
 
 
 ## Development
