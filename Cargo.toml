@@ -1,6 +1,6 @@
 [package]
 name = "philiprehberger-semver-util"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 authors = ["Philip Rehberger"]
 description = "Semantic versioning with range parsing, comparison, and bumping"
