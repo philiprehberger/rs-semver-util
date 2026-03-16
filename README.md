@@ -10,7 +10,7 @@ Semantic versioning with range parsing, comparison, and bumping.
 
 ```toml
 [dependencies]
-philiprehberger-semver-util = "0.1.5"
+philiprehberger-semver-util = "0.1.6"
 ```
 
 ## Usage
@@ -47,6 +47,14 @@ assert!(!range.matches(&Version::parse("2.0.0").unwrap()));
 | `VersionRange::parse(s)` | Parse a version range |
 | `.matches(version)` | Check if version satisfies range |
 | `sort_versions(versions)` | Sort versions in semver order |
+
+
+## Development
+
+```bash
+cargo test
+cargo clippy -- -D warnings
+```
 
 ## License
 

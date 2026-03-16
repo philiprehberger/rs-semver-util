@@ -1,10 +1,13 @@
 [package]
 name = "philiprehberger-semver-util"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 authors = ["Philip Rehberger"]
 description = "Semantic versioning with range parsing, comparison, and bumping"
 license = "MIT"
 repository = "https://github.com/philiprehberger/rs-semver-util"
+readme = "README.md"
+rust-version = "1.70"
+documentation = "https://docs.rs/philiprehberger-semver-util"
 keywords = ["semver", "version", "range", "parsing", "comparison"]
 categories = ["parser-implementations", "config"]
