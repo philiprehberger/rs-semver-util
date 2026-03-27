@@ -3,6 +3,7 @@
 [![CI](https://github.com/philiprehberger/rs-semver-util/actions/workflows/ci.yml/badge.svg)](https://github.com/philiprehberger/rs-semver-util/actions/workflows/ci.yml)
 [![Crates.io](https://img.shields.io/crates/v/philiprehberger-semver-util.svg)](https://crates.io/crates/philiprehberger-semver-util)
 [![License](https://img.shields.io/github/license/philiprehberger/rs-semver-util)](LICENSE)
+[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
 
 Semantic versioning with range parsing, comparison, and bumping
 
